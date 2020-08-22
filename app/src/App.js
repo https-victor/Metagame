@@ -4,7 +4,7 @@ import { Title, TitleSmall } from "./styles";
 
 export default function App() {
   return (
-    <div style="background-color: #fff">
+    <div>
       <Title fontSize={20}>
         Hello World
         <span>text menor</span>
