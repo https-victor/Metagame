@@ -1,5 +1,8 @@
 const { Op } = require("sequelize");
 const { User } = require("../models");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const keys = require("../keys");
 
 module.exports = {
   // Get all users
@@ -8,7 +11,7 @@ module.exports = {
   async getAllUsers(req, res) {
     const { campaigns, adventures } = req.query;
     try {
-      const users = await User.findAll({
+      const users = await User.scope("withoutPassword").findAll({
         include: [
           ...(adventures == 1
             ? [
@@ -70,11 +73,45 @@ module.exports = {
   // Create a new user
   async createNewUser(req, res) {
     const { name, email, password } = req.body;
-    try {
-      const user = await User.create({ name, email, password });
-      return res.json(user);
-    } catch (error) {
-      console.log(error);
+
+    // Validation of form data
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ error: { msg: "Please enter all fields!" } });
     }
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (user) {
+      return res
+        .status(400)
+        .json({ error: { msg: "This user already exists" } });
+    }
+    let hashedPwd = undefined;
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, async (err, hash) => {
+        if (err) throw err;
+        hashedPwd = hash;
+        try {
+          const user = await User.create({ name, email, password: hashedPwd });
+          const { password, ...userPaylod } = user.dataValues;
+
+          jwt.sign(
+            { id: userPaylod.id },
+            keys.JWT,
+            { expiresIn: 10800 },
+            (err, token) => {
+              if (err) throw err;
+              return res.json({ token, user: userPaylod });
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    });
   },
 };

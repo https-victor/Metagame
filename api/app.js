@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const keys = require("./keys.js");
 
 // Database
@@ -13,12 +12,14 @@ database
 
 const app = express();
 
-// express.json ?
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, keys.URI)));
 
 // Users routes
 app.use("/api/users", require("./routes/users"));
+
+// Auth routes
+app.use("/api/auth", require("./routes/auth"));
 
 // Campaigns routes
 app.use("/api/campaigns", require("./routes/campaigns"));

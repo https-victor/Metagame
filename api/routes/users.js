@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/UserController");
 const CampaignController = require("../controllers/CampaignController");
+const auth = require("../middleware/auth");
 
 // Users
 // Get users list
@@ -15,7 +16,11 @@ router.post("/", UserController.createNewUser);
 
 //  Contained by User
 // Get all campaigns owned by user
-router.get("/:userId/campaigns", CampaignController.getAllCampaignsByGmId);
+router.get(
+  "/:userId/campaigns",
+  auth,
+  CampaignController.getAllCampaignsByGmId
+);
 // Add a new campaign on given user
 router.post("/:userId/campaigns", CampaignController.createNewCampaign);
 
