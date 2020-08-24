@@ -1,17 +1,24 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { GlobalProvider } from './context/GlobalState';
+
 import Header from './components/Header';
+
 import GlobalStyle from './styles/global';
-import light from './styles/themes/light';
 
 function App() {
+
   return (
-    <ThemeProvider theme={light}>
-      <div className="App">
+    <BrowserRouter>
+      <GlobalProvider>
+        <div className="App">
+          <Header />
+          {/* <Footer /> */}
+        </div>
+
         <GlobalStyle />
-        <Header />
-      </div>
-    </ThemeProvider>
+      </GlobalProvider>
+    </BrowserRouter>
   );
 }
 

@@ -13,6 +13,7 @@ database
 
 const app = express();
 
+// express.json ?
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, keys.URI)));
 
