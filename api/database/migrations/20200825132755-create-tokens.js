@@ -2,17 +2,17 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("player_campaign", {
+    return queryInterface.createTable("pc_campaign", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      playerId: {
+      pcId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "pcs", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
@@ -35,6 +35,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("player_campaign");
+    return queryInterface.dropTable("pc_campaign");
   },
 };

@@ -23,6 +23,14 @@ app.use("/api/auth", require("./routes/auth"));
 
 // Campaigns routes
 app.use("/api/campaigns", require("./routes/campaigns"));
+app.use("/api/users/:userId/campaigns", require("./routes/campaigns-user.js"));
+
+// Adventures routes
+app.use("/api/users/:userId/adventures", require("./routes/adventures.js"));
+
+// PCs routes
+app.use("/api/pcs", require("./routes/pcs"));
+app.use("/api/users/:userId/pcs", require("./routes/pcs-user"));
 
 // Website
 app.get("*", (req, res) =>

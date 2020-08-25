@@ -1,7 +1,6 @@
 const { Campaign, User } = require("../models");
 const { Op, literal } = require("sequelize");
 
-Campaign;
 module.exports = {
   // Get all campaigns
   async getAllCampaigns(req, res) {
@@ -14,7 +13,7 @@ module.exports = {
                 {
                   association: "players",
                   required: false,
-                  where: { id: { [Op.ne]: { [Op.col]: "campaign.gmId" } } },
+                  // where: { id: { [Op.ne]: { [Op.col]: "campaign.gmId" } } },
                   through: { attributes: [] },
                 },
               ]
@@ -22,7 +21,7 @@ module.exports = {
           ...(gm == 1
             ? [
                 {
-                  association: "gm",
+                  association: "campaign_user",
                 },
               ]
             : []),
@@ -40,7 +39,7 @@ module.exports = {
     const { userId } = req.params;
     try {
       const user = await User.findByPk(userId, {
-        include: { association: "campaigns" },
+        include: { association: "user_campaigns" },
       });
       if (!user) {
         return res.status(400).json({
@@ -59,7 +58,7 @@ module.exports = {
     const { userId } = req.params;
     try {
       const user = await User.findByPk(userId, {
-        include: { association: "campaigns" },
+        include: { association: "user_campaigns" },
       });
       if (!user) {
         return res.status(400).json({
@@ -93,10 +92,9 @@ module.exports = {
 
   // Create a new campaign
   async createNewCampaign(req, res) {
-    const { userId } = req.params;
     const { name, description } = req.body;
     try {
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(req.user.id);
 
       if (!user) {
         return res.status(400).json({
@@ -107,10 +105,38 @@ module.exports = {
       const campaign = await Campaign.create({
         name,
         description,
-        gmId: userId,
+        gmId: req.user.id,
       });
       // await user.addAdventure(campaign);
       return res.json(campaign);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // Enroll on campaign
+  async enrollOnCampaign(req, res) {
+    const { campaignId } = req.params;
+
+    try {
+      const user = await User.findByPk(req.user.id);
+
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+
+      const test = await user.addAdventure(campaign);
+      return res.json(test);
     } catch (error) {
       console.log(error);
     }

@@ -9,4 +9,10 @@ router.get("/", CampaignController.getAllCampaigns);
 // Get campaigns by id
 router.get("/:campaignId", CampaignController.getCampaignById);
 
+// Create new campaign
+router.post("/", auth, CampaignController.createNewCampaign);
+
+// Enroll on campaign
+router.post("/enroll/:campaignId", auth, CampaignController.enrollOnCampaign);
+
 module.exports = router;

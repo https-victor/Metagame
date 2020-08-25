@@ -14,16 +14,4 @@ router.get("/:userId", UserController.getUserById);
 // Create new user
 router.post("/", UserController.createNewUser);
 
-//  Contained by User
-// Get all campaigns owned by user
-router.get(
-  "/:userId/campaigns",
-  auth,
-  CampaignController.getAllCampaignsByGmId
-);
-// Add a new campaign on given user
-router.post("/:userId/campaigns", CampaignController.createNewCampaign);
-
-router.get("/:userId/adventures", CampaignController.getAllAdventuresByUserId);
-
 module.exports = router;

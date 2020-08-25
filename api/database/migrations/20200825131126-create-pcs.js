@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("player_campaign", {
+    return queryInterface.createTable("pcs", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -16,12 +16,18 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      campaignId: {
+      guid: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      hp: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "campaigns", key: "id" },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        defaultValue: 100,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -31,10 +37,24 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      maxHp: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 100,
+      },
+      bio: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      class: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Warrior",
+      },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("player_campaign");
+    return queryInterface.dropTable("pcs");
   },
 };

@@ -23,7 +23,7 @@ module.exports = {
                 },
               ]
             : []),
-          ...(campaigns == 1 ? [{ association: "campaigns" }] : []),
+          ...(campaigns == 1 ? [{ association: "user_campaigns" }] : []),
         ],
       });
       return res.json(users);
@@ -54,7 +54,7 @@ module.exports = {
                   },
                 ]
               : []),
-            ...(campaigns == 1 ? [{ association: "campaigns" }] : []),
+            ...(campaigns == 1 ? [{ association: "user_campaigns" }] : []),
           ],
         }
       );
