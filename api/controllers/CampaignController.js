@@ -114,7 +114,14 @@ module.exports = {
     }
   },
 
-  // Enroll on campaign
+  // // GM invites another user to join his campaign as player
+  // async inviteToEnrollOnCompaign(req, res) {
+  // },
+  // // User accepts a GM's invitation to join his campaign as player
+  // async acceptInvitationToEnrollOnCompaign(req, res) {
+  // },
+
+  // Asks the GM if user can join his campaign
   async enrollOnCampaign(req, res) {
     const { campaignId } = req.params;
 
@@ -141,4 +148,8 @@ module.exports = {
       console.log(error);
     }
   },
+
+  // // GM accepts someone's request to join his campaign
+  // async acceptRequestToEnroll(req, res) {
+  // },
 };
