@@ -11,6 +11,15 @@ const Pc = database.define("pc", {
   guid: {
     type: DataTypes.STRING,
   },
+  maxHp: {
+    type: DataTypes.INTEGER,
+  },
+  bio: {
+    type: DataTypes.STRING,
+  },
+  class: {
+    type: DataTypes.STRING,
+  },
 });
 
 module.exports = Pc;

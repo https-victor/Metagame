@@ -2,6 +2,7 @@ const User = require("./User");
 const Campaign = require("./Campaign");
 const Pc = require("./Pc");
 const player_campaign = require("./player_campaign");
+const pc_campaign = require("./pc_campaign");
 
 // User - Campaign
 User.hasMany(Campaign, { foreignKey: "gmId", as: "user_campaigns" });
@@ -26,12 +27,12 @@ User.hasMany(Pc, { foreignKey: "playerId", as: "player_pcs" });
 // PCs - Campaigns
 Pc.belongsToMany(Campaign, {
   as: "campaigns",
-  through: "pc_campaign",
+  through: pc_campaign,
   foreignKey: "pcId",
 });
 Campaign.belongsToMany(Pc, {
   as: "pcs",
-  through: "pc_campaign",
+  through: pc_campaign,
   foreignKey: "campaignId",
 });
 

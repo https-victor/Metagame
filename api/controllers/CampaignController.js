@@ -1,5 +1,6 @@
 const { Campaign, User } = require("../models");
 const { Op, literal } = require("sequelize");
+const player_campaign = require("../models/player_campaign");
 
 module.exports = {
   // Get all campaigns
@@ -14,7 +15,11 @@ module.exports = {
                   association: "players",
                   required: false,
                   // where: { id: { [Op.ne]: { [Op.col]: "campaign.gmId" } } },
-                  through: { attributes: [] },
+                  attributes: { exclude: ["password"] },
+                  through: {
+                    where: { state: 3 },
+                    attributes: [],
+                  },
                 },
               ]
             : []),
@@ -36,9 +41,9 @@ module.exports = {
 
   // Get all campaigns by gmId
   async getAllCampaignsByGmId(req, res) {
-    const { userId } = req.params;
+    // const { userId } = req.params;
     try {
-      const user = await User.findByPk(userId, {
+      const user = await User.findByPk(req.user.id, {
         include: { association: "user_campaigns" },
       });
       if (!user) {
@@ -114,15 +119,116 @@ module.exports = {
     }
   },
 
+  // Player state ->
+  // 0 - Not enrolled
+  // 1 - Requested
+  // 2 - Invited
+  // 3 - Enrolled
+  // 4 - Banned
+
   // // GM invites another user to join his campaign as player
-  // async inviteToEnrollOnCompaign(req, res) {
-  // },
+  async inviteToEnrollOnCampaign(req, res) {
+    const { campaignId, playerId } = req.params;
+
+    try {
+      const user = await User.findByPk(playerId);
+
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      if (!campaign.dataValues.gmId == req.user.id) {
+        return res.status(400).json({
+          error: "Only the GM has permission to accept an invitation",
+        });
+      }
+
+      await user.addAdventure(campaign);
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId },
+      });
+      playerCampaign.state = 2;
+      await playerCampaign.save();
+
+      return res.status(200).json({
+        status: "You successfully requested to enroll on this campaign",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   // // User accepts a GM's invitation to join his campaign as player
-  // async acceptInvitationToEnrollOnCompaign(req, res) {
-  // },
+  async acceptInvitationToEnrollOnCampaign(req, res) {
+    const { campaignId } = req.params;
+
+    try {
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId: req.user.id, state: 2 },
+      });
+      if (!playerCampaign) {
+        return res.status(400).json({
+          error: "You're not invited to accept the invitation to enroll",
+        });
+      }
+      playerCampaign.state = 3;
+      await playerCampaign.save();
+
+      return res.status(200).json({
+        status: "You're now part of this adventure",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // // User refuses a GM's invitation to join his campaign as player
+  async refuseInvitationToEnrollOnCampaign(req, res) {
+    const { campaignId } = req.params;
+
+    try {
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId: req.user.id, state: 2 },
+      });
+      if (!playerCampaign) {
+        return res.status(400).json({
+          error: "You're not invited to accept the invitation to enroll",
+        });
+      }
+      await playerCampaign.destroy();
+
+      return res.status(200).json({
+        status: "You refused to join this campaign",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
   // Asks the GM if user can join his campaign
-  async enrollOnCampaign(req, res) {
+  async requestToEnrollOnCampaign(req, res) {
     const { campaignId } = req.params;
 
     try {
@@ -142,14 +248,90 @@ module.exports = {
         });
       }
 
-      const test = await user.addAdventure(campaign);
-      return res.json(test);
+      await user.addAdventure(campaign);
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId: req.user.id },
+      });
+      playerCampaign.state = 1;
+      await playerCampaign.save();
+
+      return res.status(200).json({
+        status: "You successfully requested to enroll on this campaign",
+      });
     } catch (error) {
       console.log(error);
     }
   },
 
   // // GM accepts someone's request to join his campaign
-  // async acceptRequestToEnroll(req, res) {
-  // },
+  async acceptRequestToEnroll(req, res) {
+    const { campaignId, playerId } = req.params;
+
+    try {
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      if (!campaign.dataValues.gmId == req.user.id) {
+        return res.status(400).json({
+          error: "Only the GM has permission to accept an invitation",
+        });
+      }
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId, state: 1 },
+      });
+      if (!playerCampaign) {
+        return res.status(400).json({
+          error: "This user didn't request to enroll on this campaign",
+        });
+      }
+      playerCampaign.state = 3;
+      await playerCampaign.save();
+
+      return res.status(200).json({
+        status: "This player is now allowed to play!",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // // GM refuses a user's request to join his campaign as player
+  async refuseRequestToEnrollOnCampaign(req, res) {
+    const { campaignId, playerId } = req.params;
+
+    try {
+      const campaign = await Campaign.findByPk(campaignId);
+
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      if (!campaign.dataValues.gmId == req.user.id) {
+        return res.status(400).json({
+          error: "Only the GM has permission to refuse an invitation",
+        });
+      }
+      const playerCampaign = await player_campaign.findOne({
+        where: { playerId, state: 1 },
+      });
+      if (!playerCampaign) {
+        return res.status(400).json({
+          error: "This user didn't request to enroll on this campaign",
+        });
+      }
+      await playerCampaign.destroy();
+
+      return res.status(200).json({
+        status:
+          "The user's request to join the campaign was refused successfully",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

@@ -38,7 +38,7 @@ module.exports = {
       jwt.sign(
         { id: userPayload.id },
         keys.JWT,
-        { expiresIn: 10800 },
+        { expiresIn: 36000 },
         (err, token) => {
           if (err) throw err;
           return res.json({ token, user: userPayload });

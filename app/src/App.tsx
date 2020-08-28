@@ -1,24 +1,29 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { GlobalProvider } from './context/GlobalState';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { GlobalProvider } from './store/Global/GlobalState';
+import Routes from './store/routes';
 
 import Header from './components/Header';
 
 import GlobalStyle from './styles/global';
+import { AuthProvider } from './store/Auth/AuthState';
 
 function App() {
 
   return (
-    <BrowserRouter>
+    <Router>
       <GlobalProvider>
-        <div className="App">
-          <Header />
-          {/* <Footer /> */}
-        </div>
+        <AuthProvider>
+          <div className="App">
+            <Header />
+            <Routes />
+            {/* <Footer /> */}
+          </div>
 
-        <GlobalStyle />
+          <GlobalStyle />
+        </AuthProvider>
       </GlobalProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 

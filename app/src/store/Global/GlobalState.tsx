@@ -1,8 +1,8 @@
 import React, { createContext, useReducer } from "react";
-import light from "../styles/themes/light";
-import dark from "../styles/themes/dark";
+import light from "../../styles/themes/light";
+import dark from "../../styles/themes/dark";
 import GlobalReducer from "./GlobalReducer";
-import usePersistentState from "../utils/usePersistentState";
+import usePersistentState from "../../utils/usePersistentState";
 import { ThemeProvider } from "styled-components";
 
 const initialState = { theme: 't12' };

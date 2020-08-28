@@ -3,12 +3,8 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.addColumn("player_campaign", "invited", {
-        type: Sequelize.TINYINT(1),
-        defaultValue: 1,
-      }),
-      queryInterface.addColumn("player_campaign", "enrolled", {
-        type: Sequelize.TINYINT(1),
+      queryInterface.addColumn("player_campaign", "state", {
+        type: Sequelize.INTEGER,
         defaultValue: 0,
       }),
     ]);
@@ -16,8 +12,7 @@ module.exports = {
 
   down: (queryInterface) => {
     return Promise.all([
-      queryInterface.removeColumn("player_campaign", "invited"),
-      queryInterface.removeColumn("player_campaign", "enrolled"),
+      queryInterface.removeColumn("player_campaign", "state"),
     ]);
   },
 };

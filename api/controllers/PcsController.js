@@ -83,7 +83,7 @@ module.exports = {
             association: "players",
             required: true,
             where: { id: req.user.id },
-            through: { attributes: [] },
+            through: { where: { state: 3 }, attributes: [] },
           },
         ],
       });
@@ -107,6 +107,128 @@ module.exports = {
 
       await campaign.addPc(pc);
       return res.json(pc);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  //
+  async linkPcToCampaign(req, res) {
+    const { pcId, campaignId } = req.params;
+
+    try {
+      const user = await User.findByPk(req.user.id);
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+      //
+      const pc = await Pc.findByPk(pcId);
+      if (!pc) {
+        return res.status(400).json({
+          error: "Player Character not found",
+        });
+      }
+
+      const campaign = await Campaign.findByPk(campaignId);
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      if (!(await campaign.hasPlayer(user))) {
+        return res.status(400).json({
+          error: "User not enrolled on this campaign",
+        });
+      }
+      if (await campaign.hasPc(pc)) {
+        return res.status(400).json({
+          error: "This Player Character is already linked to this campaign",
+        });
+      }
+      //
+
+      await campaign.addPc(pc);
+      return res.json(pc);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async unlinkPcToCampaign(req, res) {
+    const { pcId, campaignId } = req.params;
+
+    try {
+      const user = await User.findByPk(req.user.id);
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+
+      const pc = await Pc.findByPk(pcId);
+      if (!pc) {
+        return res.status(400).json({
+          error: "Player Character not found",
+        });
+      }
+
+      const campaign = await Campaign.findByPk(campaignId);
+      if (!campaign) {
+        return res.status(400).json({
+          error: "Campaign not found",
+        });
+      }
+      if (!(await campaign.hasPlayer(user))) {
+        return res.status(400).json({
+          error: "User not enrolled on this campaign",
+        });
+      }
+      if (!(await campaign.hasPc(pc))) {
+        return res.status(400).json({
+          error: "This Player Character is not linked to this campaign",
+        });
+      }
+
+      await campaign.removePc(pc);
+      return res.status(200).json({
+        status: "Player character unlinked successfully",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async ttsConfiguration(req, res) {
+    const { pcId } = req.params;
+    const { hp, guid } = req.body;
+    try {
+      const user = await User.findByPk(req.user.id);
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+
+      const pc = await Pc.findByPk(pcId);
+      if (!pc) {
+        return res.status(400).json({
+          error: "Player Character not found",
+        });
+      }
+
+      if (hp > 0) {
+        if (!(pc.hp + Math.abs(hp) > pc.maxHp)) {
+          pc.hp = pc.hp + Math.abs(hp);
+        } else {
+          pc.hp = pc.maxHp;
+        }
+      } else if (hp < 0) {
+        pc.hp = pc.hp - Math.abs(hp);
+      }
+      await pc.save();
+      return res.status(200).json({
+        status: "Ok!",
+      });
     } catch (error) {
       console.log(error);
     }

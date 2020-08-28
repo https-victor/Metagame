@@ -1,14 +1,14 @@
 const { DataTypes } = require("sequelize");
 const database = require("../database/index");
-const { Campaign, User } = require(".");
+const { Campaign, Pc } = require(".");
 
-const player_campaign = database.define(
-  "player_campaign",
+const pc_campaign = database.define(
+  "pc_campaign",
   {
-    playerId: {
+    pcId: {
       type: DataTypes.INTEGER,
       references: {
-        model: User,
+        model: Pc,
         key: "id",
       },
     },
@@ -19,12 +19,8 @@ const player_campaign = database.define(
         key: "id",
       },
     },
-    state: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   },
-  { freezeTableName: true, tableName: "player_campaign" }
+  { freezeTableName: true, tableName: "pc_campaign" }
 );
 
-module.exports = player_campaign;
+module.exports = pc_campaign;

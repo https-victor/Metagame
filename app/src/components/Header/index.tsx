@@ -3,7 +3,7 @@ import Switch from 'react-switch';
 import { Container } from './styles';
 import { ThemeContext } from 'styled-components';
 import { shade } from 'polished';
-import { GlobalContext } from '../../context/GlobalState';
+import { GlobalContext } from '../../store/Global/GlobalState';
 
 // interface Props {
 //     toggleTheme(): void;

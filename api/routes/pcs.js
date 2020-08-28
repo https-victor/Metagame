@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const PcsController = require("../controllers/PcsController");
 const auth = require("../middleware/auth");
+const tts = require("../middleware/tts");
 
 // Get all pcs linked to a campaign
 // router.get("/", auth, PcsController.getAllPcsByCampaignId);
@@ -21,11 +22,19 @@ router.post("/", auth, PcsController.createNewPc);
 // // Delete a PC
 // router.delete("/:pcId", auth, PcsController.deletePc);
 
-// // Link a pc to a campaign
-// router.post("/:pcId/campaigns/:campaignId", auth, PcsController.linkPc);
+// Link a pc to a campaign
+router.post(
+  "/:pcId/campaigns/:campaignId",
+  auth,
+  PcsController.linkPcToCampaign
+);
 
-// // Unlink pc from campaign
-// router.get("/:pcId/campaigns/:campaignId", auth, PcsController.unlinkPc);
+// Unlink pc from campaign
+router.delete(
+  "/:pcId/campaigns/:campaignId",
+  auth,
+  PcsController.unlinkPcToCampaign
+);
 
 // // Unlink PC from all campaigns
 // router.delete("/:pcId/unlink", auth, PcsController.unlinkPcFromAll);
@@ -38,5 +47,10 @@ router.post("/campaigns/:campaignId", auth, PcsController.createAndLinkNewPc);
 
 // // Unlink all PCs owned by user on campaign
 // router.delete("/campaigns/:campaignId", auth, PcsController.unlinkAllPcs);
+
+// --------------------------------------------------------------------- TTS --------------------------------------------------------------------- //
+
+// Edit TTS PC's configuration
+router.post("/tts/:pcId", tts, PcsController.ttsConfiguration);
 
 module.exports = router;

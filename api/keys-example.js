@@ -14,5 +14,4 @@ module.exports = {
   DB: "databaseName",
   USER: "userName",
   PWD: "password123",
-  JWT: "your_jwt_secret",
 };

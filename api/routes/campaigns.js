@@ -12,7 +12,46 @@ router.get("/:campaignId", CampaignController.getCampaignById);
 // Create new campaign
 router.post("/", auth, CampaignController.createNewCampaign);
 
-// Enroll on campaign
-router.post("/enroll/:campaignId", auth, CampaignController.enrollOnCampaign);
+// Request to enroll on campaign
+router.post(
+  "/:campaignId/request",
+  auth,
+  CampaignController.requestToEnrollOnCampaign
+);
+
+// Accept user's request
+router.post(
+  "/:campaignId/accept/:playerId",
+  auth,
+  CampaignController.acceptRequestToEnroll
+);
+
+// Invite user to join campaign
+router.post(
+  "/:campaignId/invite/:playerId",
+  auth,
+  CampaignController.inviteToEnrollOnCampaign
+);
+
+// Refuse invitation to enroll on the campaign
+router.post(
+  "/:campaignId/accept",
+  auth,
+  CampaignController.acceptInvitationToEnrollOnCampaign
+);
+
+// Accept invitation to enroll on campaign
+router.post(
+  "/:campaignId/refuse",
+  auth,
+  CampaignController.refuseInvitationToEnrollOnCampaign
+);
+
+// GM refuse user invitation
+router.post(
+  "/:campaignId/refuse/:playerId",
+  auth,
+  CampaignController.refuseRequestToEnrollOnCampaign
+);
 
 module.exports = router;
