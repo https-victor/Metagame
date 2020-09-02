@@ -1,13 +1,17 @@
-import React from 'react'
-import { Container } from './styles';
+import React, { useContext } from 'react'
 import { Outlet } from 'react-router';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../store/Auth/AuthState';
 
 const Dashboard: React.FC = () => {
+    const { user } = useContext(AuthContext);
+    console.log(user)
     return (
-        <Container>
-            Dashboard
+        <div>
+            Dashboard - Bem vindo {user.name}!
+            <Link to="library">Library</Link>
             <Outlet />
-        </Container>
+        </div>
     )
 }
 

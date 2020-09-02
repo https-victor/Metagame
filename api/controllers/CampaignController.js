@@ -38,12 +38,38 @@ module.exports = {
       console.log(error);
     }
   },
+  // Get all campaigns
+  async getMyCampaigns(req, res) {
+    const { adventures } = req.query;
+    try {
+      const user = await User.findByPk(req.user.id, {
+        include: [
+          ...(adventures != 2
+            ? [{ association: "user_campaigns", as: "campaigns" }]
+            : []),
+          ...(adventures ? [{ association: "adventures" }] : []),
+        ],
+      });
+      if (!user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+
+      return res.json({
+        ...(adventures != 2 ? { campaigns: user.user_campaigns } : {}),
+        ...(adventures ? { adventures: user.adventures } : {}),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
   // Get all campaigns by gmId
   async getAllCampaignsByGmId(req, res) {
-    // const { userId } = req.params;
+    const { userId } = req.params;
     try {
-      const user = await User.findByPk(req.user.id, {
+      const user = await User.findByPk(userId, {
         include: { association: "user_campaigns" },
       });
       if (!user) {

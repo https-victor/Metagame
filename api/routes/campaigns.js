@@ -4,7 +4,10 @@ const CampaignController = require("../controllers/CampaignController");
 const auth = require("../middleware/auth");
 
 // Get campaigns list
-router.get("/", CampaignController.getAllCampaigns);
+router.get("/all", CampaignController.getAllCampaigns);
+
+// Get campaigns list
+router.get("/", auth, CampaignController.getMyCampaigns);
 
 // Get campaigns by id
 router.get("/:campaignId", CampaignController.getCampaignById);
