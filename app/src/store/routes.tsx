@@ -6,6 +6,7 @@ import Profile from "../pages/Profile";
 import { AuthContext } from "./Auth/AuthState";
 import { Spin } from 'antd';
 import Library from "../pages/Library";
+import Interface from "../pages/Interface";
 
 const PrivateRoute = ({
   component: Component,
@@ -35,7 +36,6 @@ const PrivateRoute = ({
 export default function MainRoutes() {
   return (
     <Routes>
-
       <PrivateRoute path="/login" invert redirectTo="/" component={Login} />
       <PrivateRoute
         path="/*"
@@ -45,6 +45,7 @@ export default function MainRoutes() {
         <Route path="profile/:userId" element={<Profile />} />
         <Route path="library" element={<Library />} />
       </PrivateRoute>
+      <PrivateRoute path="interface/:userId/:pcId" redirectTo="/login" component={Interface} />
     </Routes>
   );
 }

@@ -51,6 +51,6 @@ router.post("/campaigns/:campaignId", auth, PcsController.createAndLinkNewPc);
 // --------------------------------------------------------------------- TTS --------------------------------------------------------------------- //
 
 // Edit TTS PC's configuration
-router.post("/tts/:pcId", tts, PcsController.ttsConfiguration);
+router.post("/tts/:pcId", PcsController.ttsConfiguration);
 
 module.exports = router;

@@ -199,16 +199,11 @@ module.exports = {
     }
   },
   async ttsConfiguration(req, res) {
+    var socket = req.app.get("socketIo");
+
     const { pcId } = req.params;
     const { hp, guid } = req.body;
     try {
-      const user = await User.findByPk(req.user.id);
-      if (!user) {
-        return res.status(400).json({
-          error: "User not found",
-        });
-      }
-
       const pc = await Pc.findByPk(pcId);
       if (!pc) {
         return res.status(400).json({
@@ -225,6 +220,7 @@ module.exports = {
       } else if (hp < 0) {
         pc.hp = pc.hp - Math.abs(hp);
       }
+      socket.emit("updateHP", pc.dataValues);
       await pc.save();
       return res.status(200).json({
         status: "Ok!",

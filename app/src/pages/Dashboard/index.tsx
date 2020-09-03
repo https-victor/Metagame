@@ -5,7 +5,6 @@ import { AuthContext } from '../../store/Auth/AuthState';
 
 const Dashboard: React.FC = () => {
     const { user } = useContext(AuthContext);
-    console.log(user)
     return (
         <div>
             Dashboard - Bem vindo {user.name}!

@@ -38,10 +38,9 @@ export const AuthProvider: any = ({ children }: any) => {
                     dispatch({ type: USER_LOADED, payload: json });
                     break;
                 case 401:
-                    throw new Error(json)
-                    break;
+                    throw new Error(json);
                 default:
-                    break;
+                    throw new Error(json);
             }
 
         } catch (err) {
