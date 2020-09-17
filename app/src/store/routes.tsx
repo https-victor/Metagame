@@ -45,7 +45,7 @@ export default function MainRoutes() {
         <Route path="profile/:userId" element={<Profile />} />
         <Route path="library" element={<Library />} />
       </PrivateRoute>
-      <PrivateRoute path="interface/:userId/:pcId" redirectTo="/login" component={Interface} />
+      <Route path="interface/:userId/:pcId" element={< Interface />} />
     </Routes>
   );
 }

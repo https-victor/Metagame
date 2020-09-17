@@ -3,9 +3,6 @@ TRH_Class = 'mini'
 TRH_Version = '5.0'
 TRH_Save = 'eyJBUkNTIjp7IkJSQUNLRVRTIjpbXSwiQ09MT1IiOiIjMWY4N2ZmIiwiTUFYIjo0LCJNRVNIIjoiIiwiTU9ERSI6MSwiU0NBTEUiOjEsIlNIQVBFIjoxLCJaRVJPIjowLjV9LCJCQVJTIjpbWyJIUCIsIiNkZDJiMmIiLDEwLDEwLHRydWUsdHJ1ZV1dLCJCQVNFX0xFTkdUSCI6MiwiQkFTRV9XSURUSCI6MiwiRkxBRyI6eyJDT0xPUiI6IiNmZmZmZmYiLCJIRUlHSFQiOjEuNSwiSU1BR0UiOiJodHRwczpcL1wvaS5pbWd1ci5jb21cL240NFhJYWUuanBnIiwiV0lEVEgiOjF9LCJHRU9NRVRSWSI6eyJDT0xPUiI6ImluaGVyaXQiLCJNQVRFUklBTCI6MCwiTUVTSCI6IiIsIk5PUk1BTCI6IiIsIlRFWFRVUkUiOiIifSwiTE9DS19GTEFHIjpmYWxzZSwiTE9DS19HRU9NRVRSWSI6ZmFsc2UsIk1FVEEiOnsiQVVUT1VQREFURSI6ZmFsc2UsIlVQREFURUNIRUNLIjp0cnVlfSwiTU9EVUxFX0FSQyI6ZmFsc2UsIk1PRFVMRV9CQVJTIjp0cnVlLCJNT0RVTEVfRkxBRyI6ZmFsc2UsIk1PRFVMRV9HRU9NRVRSWSI6ZmFsc2UsIk1PRFVMRV9NQVJLRVJTIjp0cnVlLCJNT0RVTEVfTU9WRU1FTlQiOmZhbHNlLCJNT0RVTEVfU0hJRUxEUyI6ZmFsc2UsIk1PVkVNRU5UIjp7IkNPTE9SIjoiaW5oZXJpdCIsIkRFRklOSVRJT05TIjpbWyJTdGFuZHN0aWxsIiwiaHR0cHM6XC9cL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb21cL1JvYk1heWVyXC9UVFNMaWJyYXJ5XC9tYXN0ZXJcL3VpXC9tb3ZlXC9zdGFuZHN0aWxsLnBuZyIsMCwwLDAsMiwwLCIjMDA4OGZmIl1dLCJMQU5EU0hPVyI6dHJ1ZSwiTEFORFRFU1QiOmZhbHNlLCJNT0RFIjoxLCJPUklHSU4iOiJFREdFIiwiU0VHTUVOVFMiOltbMCxbXV1dLCJTUEVFRERJU1RBTkNFIjoxLCJTUEVFRE1BWCI6NCwiU1BFRURNSU4iOjAsIlRVUk5NQVgiOjMsIlRVUk5OT1RDSCI6MjIuNSwiVUlIRUlHSFQiOjAuMjV9LCJPVkVSSEVBRF9IRUlHSFQiOjAuMTAwMDAwMDAwMDAwMDAwMDA1NTUxMTE1MTIzMTI1NzgyNzAyMTE4MTU4MzQwNDU0MTAxNTYyNSwiT1ZFUkhFQURfT0ZGU0VUIjotMS44OTk5OTk5OTk5OTk5OTk5MTExODIxNTgwMjk5ODc0NzY3NjYxMDk0NjY1NTI3MzQzNzUsIk9WRVJIRUFEX09SSUVOVCI6IkhPUklaT05UQUwiLCJPVkVSSEVBRF9XSURUSCI6NC41LCJQRVJNRURJVCI6MTAsIlBFUk1WSUVXIjo1MjQyODcsIlJFRlJFU0giOjEsIlNISUVMRFMiOnsiQVVUT01PREUiOnRydWUsIkNPTE9SIjoiIzFmODdmZiIsIkNSSVRDT0xPUiI6IiNkYTE5MTgiLCJDUklUSUNBTCI6WzEsMSwxLDEsMSwxXSwiQ1VSUkVOVCI6WzYsNiw2LDYsNiw2XSwiTElNSVRNT0RFIjoxLCJNQVhJTVVNIjpbNiw2LDYsNiw2LDZdLCJNSU5JTVVNIjpbMCwwLDAsMCwwLDBdLCJTSEFQRSI6MSwiVUlIRUlHSFQiOjAuMjV9LCJVSV9TQ0FMRSI6Mn0='
 
-local token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsImlhdCI6MTU5ODY1NjQ2MCwiZXhwIjoxNTk4NjkyNDYwfQ.Fifs-Mj2Y-mlphFG68AnQsRqW1K4IGNXTpRtUciAtqA"
-local pcId ="4"
-
 local state = {};local PERMEDIT = 'Host|Black';local PERMVIEW = 'Grey|Host|Admin|Black|White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Clubs|Diamonds|Hearts|Spades|Jokers';local ui_mode = '0';local controller_obj;local assetBuffer = {};local rotateVector = function(a,b)
             	local c=math.rad(b)local d=math.cos(c)*a[1]+math.sin(c)*a[2]local e=math.sin(c)*a[1]*-1+math.cos(c)*a[2]return{d,e,a[3]}
             end
@@ -22,6 +19,7 @@ data.bars=state.bars
 data.markers=state.markers
 return JSON.encode(data)
 end
+
 function onLoad(save)
             	save = JSON.decode(save) or {}
             state.bars = save.bars or {}
@@ -255,7 +253,18 @@ function editBar(data)
                             text = hasText,
                             big = isBig
                         })
-                    end
+					end
+
+					local WRdata = {
+						setHp=cur,
+						setMax=max
+                    }
+                    local gmNotesID = self.getGMNotes()
+                    local url = "http://www.aboleth.com.br/api/pcs/tts/" .. gmNotesID
+                    WebRequest.post(url, WRdata, function(a)
+                        
+                      end)
+					
             	end
 function adjustBar(data)
                     -- Bar index
@@ -274,18 +283,11 @@ function adjustBar(data)
             	    self.UI.setAttribute('bar_'..index..'_text', 'text', cur..' / '..max)
             	    self.UI.setAttribute('inp_bar_'..index..'_current', 'text', cur)
                     state.bars[index][3] = cur
-                    print(val)
-                    print(token)
-
-                    -- WebRequest.get(url, function(a)
-                    --     json = JSON.decode(a.text)
-                    --     print(json["feed"]["entry"][1]["gs$cell"]["numericValue"])
-                    --   end)
                     local WRdata = {
-                        hp=val,
-                        token=token
+                        hp=val
                     }
-                    local url = "http://www.aboleth.com.br/api/pcs/tts/" .. pcId
+                    local gmNotesID = self.getGMNotes()
+                    local url = "http://www.aboleth.com.br/api/pcs/tts/" .. gmNotesID
                     WebRequest.post(url, WRdata, function(a)
                         
                       end)

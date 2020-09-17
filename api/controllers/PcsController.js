@@ -202,7 +202,7 @@ module.exports = {
     var socket = req.app.get("socketIo");
 
     const { pcId } = req.params;
-    const { hp, guid } = req.body;
+    const { hp, setHp, setMax } = req.body;
     try {
       const pc = await Pc.findByPk(pcId);
       if (!pc) {
@@ -219,6 +219,16 @@ module.exports = {
         }
       } else if (hp < 0) {
         pc.hp = pc.hp - Math.abs(hp);
+      }
+      if (setHp) {
+        if (setHp != pc.hp) {
+          pc.hp = setHp;
+        }
+      }
+      if (setMax) {
+        if (setMax != pc.maxHp) {
+          pc.maxHp = setMax;
+        }
       }
       socket.emit("updateHP", pc.dataValues);
       await pc.save();
