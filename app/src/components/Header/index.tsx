@@ -1,17 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-const Header: React.FC = () => {
-    const location = useLocation();
-    if (location.pathname.split("/").filter(item => item)[0] === "interface") {
-        return <></>;
-    } else {
-        return (
-            <div>
-                Metagame
-            </div>
-        )
 
-    }
+
+const Header: React.FC = () => {
+    return (
+        <div id="header">
+            <a href=".">Metagame</a>
+        </div>
+    )
 }
 
 export default Header;

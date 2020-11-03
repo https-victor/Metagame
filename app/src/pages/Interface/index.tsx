@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import './style.css'
 import pc_3 from '../../assets/images/pcs/pc-3.png';
 import pc_4 from '../../assets/images/pcs/pc-4.png';
 import pc_5 from '../../assets/images/pcs/pc-5.png';
